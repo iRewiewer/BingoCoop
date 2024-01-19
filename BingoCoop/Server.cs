@@ -17,7 +17,7 @@ namespace BingoCoop
 				TcpListener tcpListener = new TcpListener(ipAddress, port);
 				tcpListener.Start();
 
-				while (true)
+				/*while (true)
 				{
 					TcpClient client = tcpListener.AcceptTcpClient();
 
@@ -26,7 +26,7 @@ namespace BingoCoop
 					connectedClients.Add(client);
 					//Thread clientThread = new Thread(() => HandleClientCommunication(client));
 					//clientThread.Start();
-				}
+				}*/
 			}
 			catch (Exception ex)
 			{

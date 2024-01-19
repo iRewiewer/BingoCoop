@@ -1,20 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Newtonsoft.Json;
 
 namespace BingoCoop
 {
 	public partial class BingoSheet : Form
 	{
-		public BingoSheet()
+		private Form rootForm;
+		private List<Button> buttonList;
+
+		public BingoSheet(Form rootForm)
 		{
+			this.rootForm = rootForm;
+			this.buttonList = new List<Button>();
 			InitializeComponent();
+
+			// Get list of buttons
+			for (int i = 1; i <= 25; i++)
+			{
+				buttonList.Add((Button)this.Controls.Find($"Button{i}", true).FirstOrDefault());
+			}
+
+			RandomizeBoard();
+		}
+
+		private void BingoButton_Click(object sender, EventArgs e)
+		{
+			Button buttonPressed = (Button)sender;
+
+			
+			// send info to server that button has been clicked
+			// mark it with color of player
+		}
+		private void OnFormClosing(object sender, FormClosingEventArgs e)
+		{
+			rootForm.Show();
+		}
+		private void RandomizeBoard()
+		{
+			// Assuming the bingo.json file is in the root directory of the project
+			string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bingo.json");
+
+			// Read the JSON file
+			string jsonContent = File.ReadAllText(filePath);
+
+			// Deserialize the JSON into a dictionary
+			Dictionary<string, List<int>> bingoDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<int>>>(jsonContent);
+
+			Random random = new Random();
+			List<string> usedEntries = new List<string>();
+
+			foreach (Button button in this.buttonList)
+			{
+				// Get a random entry from the dictionary
+				KeyValuePair<string, List<int>> randomEntry;
+				do
+				{
+					randomEntry = bingoDictionary.ElementAt(random.Next(bingoDictionary.Count));
+				} while (usedEntries.Contains(randomEntry.Key));
+
+				// Set the formatted text of the button
+				string buttonText = randomEntry.Key;
+
+				// Replace "_" with a random value from the List<int> if it's not "null"
+				if (randomEntry.Value != null)
+				{
+					int randomValue = randomEntry.Value[random.Next(randomEntry.Value.Count)];
+					buttonText = buttonText.Replace("_", randomValue.ToString());
+				}
+
+				// Additional formatting (modify as needed)
+				buttonText = buttonText.Replace("{", "").Replace("}", "").Replace("|", "");
+
+				button.Text = buttonText;
+
+				// Mark the used entry to ensure uniqueness
+				usedEntries.Add(randomEntry.Key);
+			}
 		}
 	}
 }

@@ -6,14 +6,15 @@ namespace BingoCoop
 	public partial class Dialogue : Form
 	{
 		private bool isHosting = false;
-		private Form parent;
-		private int port;
-		private IPAddress ipAddress;
+		private Form rootForm;
 
-		public Dialogue(bool isHosting, Form parent)
+		private int port;
+		private IPAddress? ipAddress;
+		
+		public Dialogue(bool isHosting, Form rootForm)
 		{
 			this.isHosting = isHosting;
-			this.parent = parent;
+			this.rootForm = rootForm;
 
 			InitializeComponent();
 
@@ -43,9 +44,6 @@ namespace BingoCoop
 					MessageBox.Show("Invalid port number. Please enter a valid integer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
-
-				this.Hide();
-				new BingoSheet().Show();
 
 				this.port = _port;
 				Server server = new Server();
@@ -85,9 +83,8 @@ namespace BingoCoop
 			client.Join(this.ipAddress, this.port);
 
 			this.Hide();
-			new BingoSheet().Show();
+			new BingoSheet(rootForm).Show();
 		}
-
 		private static string GetIPv4()
 		{
 			string ipv4Address = string.Empty;
@@ -107,7 +104,7 @@ namespace BingoCoop
 		}
 		private void OnFormClosing(object sender, FormClosingEventArgs e)
 		{
-			parent.Show();
+			rootForm.Show();
 		}
 	}
 }
