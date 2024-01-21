@@ -26,7 +26,6 @@ namespace BingoCoop
 		{
 			Button buttonPressed = (Button)sender;
 
-			
 			// send info to server that button has been clicked
 			// mark it with color of player
 		}
