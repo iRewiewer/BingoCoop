@@ -1,110 +1,100 @@
 ﻿using System.Net;
-using System.Net.Sockets;
 
 namespace BingoCoop
 {
 	public partial class Dialogue : Form
 	{
-		private bool isHosting = false;
-		private Form rootForm;
-
-		private int port;
-		private IPAddress? ipAddress;
-		
-		public Dialogue(bool isHosting, Form rootForm)
+		public Dialogue()
 		{
-			this.isHosting = isHosting;
-			this.rootForm = rootForm;
-
 			InitializeComponent();
 
-			this.portTBox.Text = "25565";
+			if(Const.debugging)
+			{
+				this.portTBox.Text = "25565";
+			}
 
-			if (isHosting)
+			if (Const.isHosting)
 			{
 				this.ipLb.Name = "IPv4:";
 				this.ipTBox.Enabled = false;
-				this.ipTBox.Text = GetIPv4();
-				this.ipAddress = IPAddress.Parse(this.ipTBox.Text);
+				this.ipTBox.Text = Const.IPv4;
+
+				Const.serverIp = IPAddress.Parse(Const.IPv4);
 			}
 		}
 		
-		private async void submitBtn_Click(object sender, EventArgs e)
+		private void submitBtn_Click(object sender, EventArgs e)
 		{
-			if(isHosting)
+			if(Const.isHosting)
 			{
+				#region Error Handling
 				if (this.portTBox.Text.Trim() == string.Empty)
 				{
-					MessageBox.Show("Port is empty. Please enter a valid port number.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					string errorMessage = "Port is empty. Please enter a valid port number.";
+					Log.Warning(errorMessage, Log.WarningType.PortError);
+					MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
-
 				if (!int.TryParse(portTBox.Text, out int _port))
 				{
-					MessageBox.Show("Invalid port number. Please enter a valid integer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					string errorMessage = "Invalid port number. Please enter a valid port number.";
+					Log.Warning(errorMessage, Log.WarningType.PortError);
+					MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
+				#endregion
 
-				this.port = _port;
+				Const.serverPort = _port;
 				Server server = new Server();
-				await server.Start(this.ipAddress, this.port);
+				server.Start(Const.serverIp, Const.serverPort);
 			}
 			else
 			{
+				#region Error Handling
 				if (!IPAddress.TryParse(this.ipTBox.Text, out IPAddress? _ip))
 				{
-					MessageBox.Show("IP address is not valid. Please enter a valid IP.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					string errorMessage = "IP address is not valid. Please enter a valid IP.";
+					Log.Warning(errorMessage, Log.WarningType.IPError);
+					MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
-
 				if (this.ipTBox.Text.Trim() == string.Empty || _ip == null)
 				{
-					MessageBox.Show("IP is empty. Please enter a valid IP.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					string errorMessage = "IP is empty. Please enter a valid IP.";
+					Log.Warning(errorMessage, Log.WarningType.IPError);
+					MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
-
-				if (!int.TryParse(this.portTBox.Text, out int _port))
+				if (!int.TryParse(portTBox.Text, out int _port))
 				{
-					MessageBox.Show("Invalid port number. Please enter a valid integer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					string errorMessage = "Invalid port number. Please enter a valid port number.";
+					Log.Warning(errorMessage, Log.WarningType.PortError);
+					MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
-
 				if (this.portTBox.Text.Trim() == string.Empty)
 				{
-					MessageBox.Show("Port is empty. Please enter a valid port number.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					string errorMessage = "Port is empty. Please enter a valid port number.";
+					Log.Warning(errorMessage, Log.WarningType.PortError);
+					MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
+				#endregion
 
-				this.port = _port;
-				this.ipAddress = _ip;
+				Const.serverIp = _ip;
+				Const.serverPort = _port;
 			}
 
 			Client client = new Client();
-			client.Join(this.ipAddress, this.port);
+			client.Join(Const.serverIp, Const.serverPort);
 
 			this.Hide();
-			new BingoSheet(rootForm).Show();
+			new BingoSheet().Show();
 		}
-		private static string GetIPv4()
-		{
-			string ipv4Address = string.Empty;
-			string hostName = Dns.GetHostName();
-			IPAddress[] addresses = Dns.GetHostAddresses(hostName);
 
-			foreach (IPAddress address in addresses)
-			{
-				if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-				{
-					ipv4Address = address.ToString();
-					break;
-				}
-			}
-
-			return ipv4Address;
-		}
 		private void OnFormClosing(object sender, FormClosingEventArgs e)
 		{
-			rootForm.Show();
+			Const.rootForm.Show();
 		}
 	}
 }

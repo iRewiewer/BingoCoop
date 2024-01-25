@@ -8,9 +8,9 @@ namespace BingoCoop
 		{
 			
 		}
-		public void Join(IPAddress ip, int port)
+		public void Join(IPAddress ipAddress, int port)
 		{
-			
+			Log.Message($"Joining server with ip: {ipAddress} and port: {port}");
 		}
 	}
 }

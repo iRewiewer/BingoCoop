@@ -4,13 +4,10 @@ namespace BingoCoop
 {
 	public partial class BingoSheet : Form
 	{
-		private Form rootForm;
-		private List<Button> buttonList;
+		private List<Button> buttonList = new List<Button>();
 
-		public BingoSheet(Form rootForm)
+		public BingoSheet()
 		{
-			this.rootForm = rootForm;
-			this.buttonList = new List<Button>();
 			InitializeComponent();
 
 			// Get list of buttons
@@ -29,13 +26,8 @@ namespace BingoCoop
 			// send info to server that button has been clicked
 			// mark it with color of player
 		}
-		private void OnFormClosing(object sender, FormClosingEventArgs e)
-		{
-			rootForm.Show();
-		}
 		private void RandomizeBoard()
 		{
-			// Assuming the bingo.json file is in the root directory of the project
 			string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bingo.json");
 
 			// Read the JSON file
@@ -74,6 +66,10 @@ namespace BingoCoop
 				// Mark the used entry to ensure uniqueness
 				usedEntries.Add(randomEntry.Key);
 			}
+		}
+		private void OnFormClosing(object sender, FormClosingEventArgs e)
+		{
+			Const.rootForm.Show();
 		}
 	}
 }
