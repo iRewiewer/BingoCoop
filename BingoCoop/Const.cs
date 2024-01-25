@@ -7,6 +7,7 @@ namespace BingoCoop
 		public static readonly bool debugging = true;
 		public static string logsFilePath;
 		public static string logsFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+		public static string bingoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bingo.json");
 		public static Form rootForm;
 
 		public static bool isHosting;

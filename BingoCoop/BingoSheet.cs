@@ -28,12 +28,8 @@ namespace BingoCoop
 		}
 		private void RandomizeBoard()
 		{
-			string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bingo.json");
+			string jsonContent = File.ReadAllText(Const.bingoPath);
 
-			// Read the JSON file
-			string jsonContent = File.ReadAllText(filePath);
-
-			// Deserialize the JSON into a dictionary
 			Dictionary<string, List<int>> bingoDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<int>>>(jsonContent);
 
 			Random random = new Random();
@@ -69,6 +65,7 @@ namespace BingoCoop
 		}
 		private void OnFormClosing(object sender, FormClosingEventArgs e)
 		{
+			Log.Message("Closing bingo sheet.");
 			Const.rootForm.Show();
 		}
 	}

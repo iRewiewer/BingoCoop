@@ -25,7 +25,8 @@
 					}
 					catch (Exception ex)
 					{
-						MessageBox.Show("Error creating logs file. To enable logging, try restarting the application. The application will continue regardless.");
+						MessageBox.Show("Error creating logs file.\nTry restarting the application.", "Error");
+						Application.Exit();
 					}
 
 					Log.Message($"Logs folder created successfully at: {filePath}");
@@ -33,7 +34,8 @@
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show("Error creating logs folder. To enable logging, try restarting the application. The application will continue regardless.");
+				MessageBox.Show("Error creating logs folder.\nTry restarting the application.", "Error");
+				Application.Exit();
 			}
 		}
 
