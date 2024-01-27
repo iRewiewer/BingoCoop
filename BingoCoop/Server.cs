@@ -1,5 +1,7 @@
-﻿using System.Net;
+﻿using SuperSimpleTcp;
+using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace BingoCoop
 {
@@ -14,15 +16,27 @@ namespace BingoCoop
 		{
 			Log.Message($"Starting server with ip: {ipAddress} and port: {port}");
 
-			try
-			{
-				TcpListener tcpListener = new TcpListener(ipAddress, port);
-				tcpListener.Start();
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine($"Error: {ex.Message}");
-			}
+			SimpleTcpServer server = new SimpleTcpServer($"{ipAddress}:{port}");
+
+			server.Events.ClientConnected += ClientConnected;
+			server.Events.ClientDisconnected += ClientDisconnected;
+			server.Events.DataReceived += DataReceived;
+
+			server.Start();
+
+			server.Send("[ClientIp:Port]", "Hello, world!");
+		}
+		static void ClientConnected(object sender, ConnectionEventArgs e)
+		{
+			MessageBox.Show($"[Server] [{e.IpPort}] client connected");
+		}
+		static void ClientDisconnected(object sender, ConnectionEventArgs e)
+		{
+			MessageBox.Show($"[Server] [{e.IpPort}] client disconnected: {e.Reason}");
+		}
+		static void DataReceived(object sender, DataReceivedEventArgs e)
+		{
+			MessageBox.Show($"[Server] [{e.IpPort}]: {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
 		}
 	}
 }
