@@ -17,7 +17,7 @@ namespace BingoCoop
 			Log.Message("Pressed join button.");
 			this.Hide();
 			Const.isHosting = false;
-			new Dialogue().Show();
+			new ConnectionDialogue(this).Show();
 		}
 
 		private void hostBtn_Click(object sender, EventArgs e)
@@ -25,7 +25,7 @@ namespace BingoCoop
 			Log.Message("Pressed host button.");
 			this.Hide();
 			Const.isHosting = true;
-			new Dialogue().Show();
+			new ConnectionDialogue(this).Show();
 		}
 
 		private string GetLogsFilePath()

@@ -12,19 +12,27 @@ namespace BingoCoop
 		{
 			connectedClients = new List<TcpClient>();
 		}
-		public void Start(IPAddress ipAddress, int port)
+		public bool Start(IPAddress ipAddress, int port)
 		{
 			Log.Message($"Starting server with ip: {ipAddress} and port: {port}");
 
-			SimpleTcpServer server = new SimpleTcpServer($"{ipAddress}:{port}");
+			Const.server = new SimpleTcpServer($"{ipAddress}:{port}");
 
-			server.Events.ClientConnected += ClientConnected;
-			server.Events.ClientDisconnected += ClientDisconnected;
-			server.Events.DataReceived += DataReceived;
+			Const.server.Events.ClientConnected += ClientConnected;
+			Const.server.Events.ClientDisconnected += ClientDisconnected;
+			Const.server.Events.DataReceived += DataReceived;
 
-			server.Start();
+			try
+			{
+				Const.server.Start();
+			}
+			catch (Exception ex)
+			{
+				return false;
+			}
 
-			server.Send("[ClientIp:Port]", "Hello, world!");
+			Const.server.Send("[ClientIp:Port]", "Hello, world!");
+			return true;
 		}
 		static void ClientConnected(object sender, ConnectionEventArgs e)
 		{

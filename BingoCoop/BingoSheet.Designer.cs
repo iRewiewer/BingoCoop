@@ -53,11 +53,17 @@
 			button23 = new Button();
 			button24 = new Button();
 			button25 = new Button();
+			colorDialog = new ColorDialog();
+			playerName = new Label();
+			playerColor = new Label();
+			colorBtn = new Button();
+			playerNameBtn = new Button();
 			SuspendLayout();
 			// 
 			// button1
 			// 
-			button1.BackColor = Color.White;
+			button1.BackColor = Color.Silver;
+			button1.Enabled = false;
 			button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button1.ForeColor = Color.Black;
 			button1.Location = new Point(33, 33);
@@ -70,7 +76,8 @@
 			// 
 			// button2
 			// 
-			button2.BackColor = Color.White;
+			button2.BackColor = Color.Silver;
+			button2.Enabled = false;
 			button2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button2.ForeColor = Color.Black;
 			button2.Location = new Point(133, 33);
@@ -83,7 +90,8 @@
 			// 
 			// button3
 			// 
-			button3.BackColor = Color.White;
+			button3.BackColor = Color.Silver;
+			button3.Enabled = false;
 			button3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button3.ForeColor = Color.Black;
 			button3.Location = new Point(233, 33);
@@ -96,7 +104,8 @@
 			// 
 			// button4
 			// 
-			button4.BackColor = Color.White;
+			button4.BackColor = Color.Silver;
+			button4.Enabled = false;
 			button4.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button4.ForeColor = Color.Black;
 			button4.Location = new Point(333, 33);
@@ -109,7 +118,8 @@
 			// 
 			// button5
 			// 
-			button5.BackColor = Color.White;
+			button5.BackColor = Color.Silver;
+			button5.Enabled = false;
 			button5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button5.ForeColor = Color.Black;
 			button5.Location = new Point(433, 33);
@@ -122,7 +132,8 @@
 			// 
 			// button6
 			// 
-			button6.BackColor = Color.White;
+			button6.BackColor = Color.Silver;
+			button6.Enabled = false;
 			button6.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button6.ForeColor = Color.Black;
 			button6.Location = new Point(33, 133);
@@ -135,7 +146,8 @@
 			// 
 			// button7
 			// 
-			button7.BackColor = Color.White;
+			button7.BackColor = Color.Silver;
+			button7.Enabled = false;
 			button7.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button7.ForeColor = Color.Black;
 			button7.Location = new Point(133, 133);
@@ -148,7 +160,8 @@
 			// 
 			// button8
 			// 
-			button8.BackColor = Color.White;
+			button8.BackColor = Color.Silver;
+			button8.Enabled = false;
 			button8.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button8.ForeColor = Color.Black;
 			button8.Location = new Point(233, 133);
@@ -161,7 +174,8 @@
 			// 
 			// button9
 			// 
-			button9.BackColor = Color.White;
+			button9.BackColor = Color.Silver;
+			button9.Enabled = false;
 			button9.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button9.ForeColor = Color.Black;
 			button9.Location = new Point(333, 133);
@@ -174,7 +188,8 @@
 			// 
 			// button10
 			// 
-			button10.BackColor = Color.White;
+			button10.BackColor = Color.Silver;
+			button10.Enabled = false;
 			button10.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button10.ForeColor = Color.Black;
 			button10.Location = new Point(433, 133);
@@ -187,7 +202,8 @@
 			// 
 			// button11
 			// 
-			button11.BackColor = Color.White;
+			button11.BackColor = Color.Silver;
+			button11.Enabled = false;
 			button11.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button11.ForeColor = Color.Black;
 			button11.Location = new Point(33, 233);
@@ -200,7 +216,8 @@
 			// 
 			// button12
 			// 
-			button12.BackColor = Color.White;
+			button12.BackColor = Color.Silver;
+			button12.Enabled = false;
 			button12.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button12.ForeColor = Color.Black;
 			button12.Location = new Point(133, 233);
@@ -213,7 +230,8 @@
 			// 
 			// button13
 			// 
-			button13.BackColor = Color.White;
+			button13.BackColor = Color.Silver;
+			button13.Enabled = false;
 			button13.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button13.ForeColor = Color.Black;
 			button13.Location = new Point(233, 233);
@@ -226,7 +244,8 @@
 			// 
 			// button14
 			// 
-			button14.BackColor = Color.White;
+			button14.BackColor = Color.Silver;
+			button14.Enabled = false;
 			button14.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button14.ForeColor = Color.Black;
 			button14.Location = new Point(333, 233);
@@ -239,7 +258,8 @@
 			// 
 			// button15
 			// 
-			button15.BackColor = Color.White;
+			button15.BackColor = Color.Silver;
+			button15.Enabled = false;
 			button15.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button15.ForeColor = Color.Black;
 			button15.Location = new Point(433, 233);
@@ -252,7 +272,8 @@
 			// 
 			// button16
 			// 
-			button16.BackColor = Color.White;
+			button16.BackColor = Color.Silver;
+			button16.Enabled = false;
 			button16.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button16.ForeColor = Color.Black;
 			button16.Location = new Point(33, 333);
@@ -265,7 +286,8 @@
 			// 
 			// button17
 			// 
-			button17.BackColor = Color.White;
+			button17.BackColor = Color.Silver;
+			button17.Enabled = false;
 			button17.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button17.ForeColor = Color.Black;
 			button17.Location = new Point(133, 333);
@@ -278,7 +300,8 @@
 			// 
 			// button18
 			// 
-			button18.BackColor = Color.White;
+			button18.BackColor = Color.Silver;
+			button18.Enabled = false;
 			button18.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button18.ForeColor = Color.Black;
 			button18.Location = new Point(233, 333);
@@ -291,7 +314,8 @@
 			// 
 			// button19
 			// 
-			button19.BackColor = Color.White;
+			button19.BackColor = Color.Silver;
+			button19.Enabled = false;
 			button19.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button19.ForeColor = Color.Black;
 			button19.Location = new Point(333, 333);
@@ -304,7 +328,8 @@
 			// 
 			// button20
 			// 
-			button20.BackColor = Color.White;
+			button20.BackColor = Color.Silver;
+			button20.Enabled = false;
 			button20.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button20.ForeColor = Color.Black;
 			button20.Location = new Point(433, 333);
@@ -317,7 +342,8 @@
 			// 
 			// button21
 			// 
-			button21.BackColor = Color.White;
+			button21.BackColor = Color.Silver;
+			button21.Enabled = false;
 			button21.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button21.ForeColor = Color.Black;
 			button21.Location = new Point(33, 433);
@@ -330,7 +356,8 @@
 			// 
 			// button22
 			// 
-			button22.BackColor = Color.White;
+			button22.BackColor = Color.Silver;
+			button22.Enabled = false;
 			button22.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button22.ForeColor = Color.Black;
 			button22.Location = new Point(133, 433);
@@ -343,7 +370,8 @@
 			// 
 			// button23
 			// 
-			button23.BackColor = Color.White;
+			button23.BackColor = Color.Silver;
+			button23.Enabled = false;
 			button23.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button23.ForeColor = Color.Black;
 			button23.Location = new Point(233, 433);
@@ -356,7 +384,8 @@
 			// 
 			// button24
 			// 
-			button24.BackColor = Color.White;
+			button24.BackColor = Color.Silver;
+			button24.Enabled = false;
 			button24.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button24.ForeColor = Color.Black;
 			button24.Location = new Point(333, 433);
@@ -369,7 +398,8 @@
 			// 
 			// button25
 			// 
-			button25.BackColor = Color.White;
+			button25.BackColor = Color.Silver;
+			button25.Enabled = false;
 			button25.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
 			button25.ForeColor = Color.Black;
 			button25.Location = new Point(433, 433);
@@ -380,12 +410,52 @@
 			button25.UseVisualStyleBackColor = false;
 			button25.Click += BingoButton_Click;
 			// 
+			// playerName
+			// 
+			playerName.AutoSize = true;
+			playerName.Location = new Point(546, 37);
+			playerName.Name = "playerName";
+			playerName.Size = new Size(73, 17);
+			playerName.TabIndex = 25;
+			playerName.Text = "Your name:";
+			// 
+			// playerColor
+			// 
+			playerColor.AutoSize = true;
+			playerColor.Location = new Point(546, 69);
+			playerColor.Name = "playerColor";
+			playerColor.Size = new Size(71, 17);
+			playerColor.TabIndex = 26;
+			playerColor.Text = "Your color:";
+			// 
+			// colorBtn
+			// 
+			colorBtn.Location = new Point(623, 66);
+			colorBtn.Name = "colorBtn";
+			colorBtn.Size = new Size(29, 27);
+			colorBtn.TabIndex = 27;
+			colorBtn.UseVisualStyleBackColor = true;
+			colorBtn.Click += colorBtn_Click;
+			// 
+			// playerNameBtn
+			// 
+			playerNameBtn.Location = new Point(623, 33);
+			playerNameBtn.Name = "playerNameBtn";
+			playerNameBtn.Size = new Size(134, 27);
+			playerNameBtn.TabIndex = 28;
+			playerNameBtn.UseVisualStyleBackColor = true;
+			playerNameBtn.Click += playerNameBtn_Click;
+			// 
 			// BingoSheet
 			// 
 			AutoScaleDimensions = new SizeF(7F, 17F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = SystemColors.Control;
-			ClientSize = new Size(578, 565);
+			ClientSize = new Size(774, 565);
+			Controls.Add(playerNameBtn);
+			Controls.Add(colorBtn);
+			Controls.Add(playerColor);
+			Controls.Add(playerName);
 			Controls.Add(button21);
 			Controls.Add(button22);
 			Controls.Add(button23);
@@ -415,6 +485,7 @@
 			Text = "BingoSheet";
 			FormClosing += OnFormClosing;
 			ResumeLayout(false);
+			PerformLayout();
 		}
 
 		#endregion
@@ -444,5 +515,10 @@
 		private Button button23;
 		private Button button24;
 		private Button button25;
+		private ColorDialog colorDialog;
+		private Label playerName;
+		private Label playerColor;
+		private Button colorBtn;
+		private Button playerNameBtn;
 	}
 }

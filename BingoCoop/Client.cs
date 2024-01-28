@@ -10,19 +10,27 @@ namespace BingoCoop
 		{
 			
 		}
-		public void Join(IPAddress ipAddress, int port)
+		public bool Join(IPAddress ipAddress, int port)
 		{
 			Log.Message($"Joining server with ip: {ipAddress} and port: {port}");
 
-			SimpleTcpClient client = new SimpleTcpClient($"{ipAddress}:{port}");
+			Const.client = new SimpleTcpClient($"{ipAddress}:{port}");
 
-			client.Events.Connected += Connected;
-			client.Events.Disconnected += Disconnected;
-			client.Events.DataReceived += DataReceived;
+			Const.client.Events.Connected += Connected;
+			Const.client.Events.Disconnected += Disconnected;
+			Const.client.Events.DataReceived += DataReceived;
 
-			client.Connect();
-
-			client.Send("Hello, world!");
+			try
+			{
+				Const.client.Connect();
+			}
+			catch (Exception ex)
+			{
+				return false;
+			}
+			
+			Const.client.Send("Hello, world!");
+			return true;
 		}
 		static void Connected(object sender, ConnectionEventArgs e)
 		{

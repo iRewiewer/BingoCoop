@@ -4,10 +4,13 @@
     <Compile Update="BingoSheet.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Dialogue.cs">
+    <Compile Update="ConnectionDialogue.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Menu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="PlayerNameDialogue.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

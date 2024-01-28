@@ -2,10 +2,16 @@
 
 namespace BingoCoop
 {
-	public partial class Dialogue : Form
+	public partial class ConnectionDialogue : Form
 	{
-		public Dialogue()
+		private Form parentForm;
+		private bool hasServerStarted = false;
+		private bool isConnected = false;
+
+		public ConnectionDialogue(Form parentForm)
 		{
+			this.parentForm = parentForm;
+
 			InitializeComponent();
 
 			if(Const.debugging)
@@ -25,7 +31,7 @@ namespace BingoCoop
 		
 		private void submitBtn_Click(object sender, EventArgs e)
 		{
-			if(Const.isHosting)
+			if(Const.isHosting && !this.hasServerStarted)
 			{
 				#region Error Handling
 				if (this.portTBox.Text.Trim() == string.Empty)
@@ -46,7 +52,7 @@ namespace BingoCoop
 
 				Const.serverPort = _port;
 				Server server = new Server();
-				server.Start(Const.serverIp, Const.serverPort);
+				this.hasServerStarted = server.Start(Const.serverIp, Const.serverPort);
 			}
 			else
 			{
@@ -86,10 +92,13 @@ namespace BingoCoop
 			}
 
 			Client client = new Client();
-			client.Join(Const.serverIp, Const.serverPort);
+			this.isConnected = client.Join(Const.serverIp, Const.serverPort);
 
-			this.Hide();
-			new BingoSheet().Show();
+			if (this.isConnected)
+			{
+				this.Hide();
+				new BingoSheet(this).Show();
+			}
 		}
 
 		private void OnFormClosing(object sender, FormClosingEventArgs e)

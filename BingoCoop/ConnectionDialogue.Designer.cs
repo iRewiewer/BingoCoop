@@ -1,6 +1,6 @@
 ﻿namespace BingoCoop
 {
-	partial class Dialogue
+	partial class ConnectionDialogue
 	{
 		/// <summary>
 		/// Required designer variable.

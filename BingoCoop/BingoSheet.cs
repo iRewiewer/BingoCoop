@@ -1,13 +1,19 @@
 ﻿using Newtonsoft.Json;
+using SuperSimpleTcp;
 
 namespace BingoCoop
 {
 	public partial class BingoSheet : Form
 	{
 		private List<Button> buttonList = new List<Button>();
+		private Form parentForm;
+		private bool hasSetName = false;
+		private bool hasSetColor = false;
 
-		public BingoSheet()
+		public BingoSheet(Form parentForm)
 		{
+			this.parentForm = parentForm;
+
 			InitializeComponent();
 
 			// Get list of buttons
@@ -18,7 +24,37 @@ namespace BingoCoop
 
 			RandomizeBoard();
 		}
+		private void colorBtn_Click(object sender, EventArgs e)
+		{
+			if (colorDialog.ShowDialog() != DialogResult.Cancel)
+			{
+				colorBtn.ForeColor = colorDialog.Color;
+				colorBtn.BackColor = colorDialog.Color;
+			}
+			this.hasSetColor = true;
 
+			if (this.hasSetColor && this.hasSetName)
+			{
+				buttonList.ForEach(button => { button.Enabled = true; });
+			}
+		}
+		private void playerNameBtn_Click(object sender, EventArgs e)
+		{
+			PlayerNameDialogue playerNameDialogue = new PlayerNameDialogue();
+			if (playerNameDialogue.ShowDialog() == DialogResult.OK)
+			{
+				playerNameBtn.Text = playerNameDialogue.playerName;
+			};
+			this.hasSetName = true;
+
+			if (this.hasSetColor && this.hasSetName)
+			{
+				buttonList.ForEach(button => {
+					button.Enabled = true;
+					button.BackColor = Color.White;
+				});
+			}
+		}
 		private void BingoButton_Click(object sender, EventArgs e)
 		{
 			Button buttonPressed = (Button)sender;
@@ -66,7 +102,17 @@ namespace BingoCoop
 		private void OnFormClosing(object sender, FormClosingEventArgs e)
 		{
 			Log.Message("Closing bingo sheet.");
+			if (Const.isHosting)
+			{
+				Const.client.Disconnect();
+				if (Const.server != null)
+				{
+					Const.server.Stop();
+				}
+			}
+
 			Const.rootForm.Show();
+			this.parentForm.Close();
 		}
 	}
 }
