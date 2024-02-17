@@ -9,7 +9,7 @@ namespace BingoCoop
 		private Form parentForm;
 		private bool hasSetName = false;
 		private bool hasSetColor = false;
-
+		private Color player_color;
 		public BingoSheet(Form parentForm)
 		{
 			this.parentForm = parentForm;
@@ -32,6 +32,8 @@ namespace BingoCoop
 				colorBtn.BackColor = colorDialog.Color;
 			}
 			this.hasSetColor = true;
+
+			player_color = colorDialog.Color;
 
 			if (this.hasSetColor && this.hasSetName)
 			{
@@ -61,6 +63,9 @@ namespace BingoCoop
 
 			// send info to server that button has been clicked
 			// mark it with color of player
+			//buttonPressed.BackColor = player_color;
+
+			Const.client.Send(buttonPressed.Text + ':' + player_color + ":false");
 		}
 		private void RandomizeBoard()
 		{
@@ -114,5 +119,60 @@ namespace BingoCoop
 			Const.rootForm.Show();
 			this.parentForm.Close();
 		}
-	}
+
+
+		public void UpdateColors(string data)
+        {
+			//i receive data and i update the colors + disable the thing
+
+			//let's parse string which will be button:color:true/false
+
+			Console.WriteLine(data);
+
+			// Split the input string into parts based on ":" and remove any surrounding spaces
+			string[] parts = data.Split(':');
+
+			// Extract the button name (first part)
+			string buttonText = parts[0].Trim();
+
+			// Extract the color string (second part)
+			string colorString = parts[1].Trim().Substring("Color [".Length); // Remove "Color [" from the beginning
+			colorString = colorString.Remove(colorString.Length - 1); // Remove "]" from the end
+
+			// Extract the boolean value (third part)
+			bool booleanValue = Convert.ToBoolean(parts[2].Trim());
+
+			// Parse the color string to get R, G, and B values
+			int r = int.Parse(colorString.Split(',')[1].Trim().Substring(2));
+			int g = int.Parse(colorString.Split(',')[2].Trim().Substring(2));
+			int b = int.Parse(colorString.Split(',')[3].Trim().Substring(2));
+
+			// Create Color object using the extracted R, G, B values
+			Color color = Color.FromArgb(r, g, b);
+
+
+			//good now we have all we need so let's find the buttona and update 
+
+			this.Invoke((MethodInvoker)(() =>
+
+			{
+				foreach (Button button in buttonList)
+				{
+					if (button.Text == buttonText)
+					{
+						button.Enabled = booleanValue;
+						button.BackColor = color;
+						break;
+					}
+				}
+			}
+
+			));
+
+		
+
+
+
+		}
+    }
 }

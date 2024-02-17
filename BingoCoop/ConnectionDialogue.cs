@@ -54,7 +54,8 @@ namespace BingoCoop
 				Server server = new Server();
 				this.hasServerStarted = server.Start(Const.serverIp, Const.serverPort);
 			}
-			else
+			//add condition
+			else if (!Const.isHosting)
 			{
 				#region Error Handling
 				if (!IPAddress.TryParse(this.ipTBox.Text, out IPAddress? _ip))
@@ -97,7 +98,10 @@ namespace BingoCoop
 			if (this.isConnected)
 			{
 				this.Hide();
-				new BingoSheet(this).Show();
+
+				Const.sheet = new BingoSheet(this);
+
+				Const.sheet.Show();
 			}
 		}
 

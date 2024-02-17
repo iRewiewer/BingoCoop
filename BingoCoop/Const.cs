@@ -12,6 +12,8 @@ namespace BingoCoop
 		public static string bingoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bingo.json");
 		public static Form rootForm;
 
+		public static int clientID;
+
 		public static bool isHosting;
 		public static string IPv4 = GetIPv4();
 		public static IPAddress serverIp;
@@ -19,6 +21,9 @@ namespace BingoCoop
 
 		public static SimpleTcpServer server;
 		public static SimpleTcpClient client;
+		public static BingoSheet sheet;
+
+		//public List<Color> bingoColors = new List<Color>();
 		#endregion
 
 		#region Set by server

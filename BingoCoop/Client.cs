@@ -1,6 +1,7 @@
 ﻿using SuperSimpleTcp;
 using System.Net;
 using System.Text;
+using BingoCoop;
 
 namespace BingoCoop
 {
@@ -29,7 +30,7 @@ namespace BingoCoop
 				return false;
 			}
 			
-			Const.client.Send("Hello, world!");
+			//Const.client.Send("Hello, world!");
 			return true;
 		}
 		static void Connected(object sender, ConnectionEventArgs e)
@@ -42,7 +43,13 @@ namespace BingoCoop
 		}
 		static void DataReceived(object sender, DataReceivedEventArgs e)
 		{
-			MessageBox.Show($"[Client] [{e.IpPort}] {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
+			//MessageBox.Show($"[Client] [{e.IpPort}] {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
+
+			//now when they receive data they just need to update with the string
+
+
+			Const.sheet.UpdateColors(Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count));
+			
 		}
 	}
 }
