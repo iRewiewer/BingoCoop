@@ -51,8 +51,12 @@ namespace BingoCoop
 			connectedIP.Add(e.IpPort);
 
 			//here when client connects i need to send data regarding the buttons
-			
+
 			//Const.server.Send(e.IpPort, "You were connected client " + connectedClients.Count);
+			if(Const.bingoButtonTexts != null)
+            {
+				Const.server.Send(e.IpPort, Const.bingoButtonTexts);
+            }
 		}
 		private void ClientDisconnected(object sender, ConnectionEventArgs e)
 		{

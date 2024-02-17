@@ -22,6 +22,7 @@ namespace BingoCoop
 		public static SimpleTcpServer server;
 		public static SimpleTcpClient client;
 		public static BingoSheet sheet;
+		public static string bingoButtonTexts;
 
 		//public List<Color> bingoColors = new List<Color>();
 		#endregion

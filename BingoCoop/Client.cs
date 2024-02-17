@@ -7,6 +7,8 @@ namespace BingoCoop
 {
 	public class Client
 	{
+
+		private int count = 0;
 		public Client()
 		{
 			
@@ -41,15 +43,22 @@ namespace BingoCoop
 		{
 			MessageBox.Show($"[Client] *** Server {e.IpPort} disconnected");
 		}
-		static void DataReceived(object sender, DataReceivedEventArgs e)
+		private void DataReceived(object sender, DataReceivedEventArgs e)
 		{
 			//MessageBox.Show($"[Client] [{e.IpPort}] {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
 
 			//now when they receive data they just need to update with the string
 
 
-			Const.sheet.UpdateColors(Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count));
-			
+			if(count == 0 && !Const.isHosting)
+            {
+				Const.sheet.UpdateMapClient(Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count));
+            }
+
+			else Const.sheet.UpdateColors(Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count));
+
+
+			count++;
 		}
 	}
 }

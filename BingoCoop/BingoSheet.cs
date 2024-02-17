@@ -23,6 +23,13 @@ namespace BingoCoop
 			}
 
 			RandomizeBoard();
+			//add all the names in the board to one string
+
+			Const.bingoButtonTexts = "";
+			foreach (Button button in buttonList)
+            {
+				Const.bingoButtonTexts += button.Text + ":";
+            }
 		}
 		private void colorBtn_Click(object sender, EventArgs e)
 		{
@@ -174,5 +181,29 @@ namespace BingoCoop
 
 
 		}
+
+		public void UpdateMapClient(string data)
+        {
+
+			string[] parts = data.Split(':');
+
+
+			int i = 0;
+
+			this.Invoke((MethodInvoker)(() =>
+
+			{
+
+				foreach (Button button in buttonList)
+				{
+					button.Text = parts[i];
+					i++;
+				}
+			}
+
+			));
+
+
+        }
     }
 }
