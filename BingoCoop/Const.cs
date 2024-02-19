@@ -6,7 +6,6 @@ namespace BingoCoop
 	public static class Const
 	{
 		#region Set by app
-		public static readonly bool debugging = true;
 		public static string logsFilePath;
 		public static string logsFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
 		public static string bingoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bingo.json");
@@ -22,9 +21,9 @@ namespace BingoCoop
 		public static SimpleTcpServer server;
 		public static SimpleTcpClient client;
 		public static BingoSheet sheet;
-		public static string bingoButtonTexts;
+		public static string buttonsContentJSON;
+		public static bool hasReceivedBoard = false;
 
-		//public List<Color> bingoColors = new List<Color>();
 		#endregion
 
 		#region Set by server

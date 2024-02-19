@@ -1,6 +1,5 @@
 ﻿using SuperSimpleTcp;
 using System.Net;
-using System.Net.Sockets;
 using System.Text;
 
 namespace BingoCoop
@@ -10,13 +9,13 @@ namespace BingoCoop
 		public List<SimpleTcpClient> connectedClients;
 		public List<string> connectedIP;
 
-
-
 		public Server()
 		{
 			connectedClients = new List<SimpleTcpClient>();
 			connectedIP = new List<string>();
 		}
+
+		#region Public methods
 		public bool Start(IPAddress ipAddress, int port)
 		{
 			Log.Message($"Starting server with ip: {ipAddress} and port: {port}");
@@ -36,33 +35,27 @@ namespace BingoCoop
 				return false;
 			}
 
-			//Const.server.Send("[ClientIp:Port]", "Hello, world!");
 			return true;
 		}
+		#endregion
+		#region Private methods
 		private void ClientConnected(object sender, ConnectionEventArgs e)
 		{
-			
 			MessageBox.Show($"[Server] [{e.IpPort}] client connected");
 
-			//adding the new client to the list
-			SimpleTcpClient new_client = new SimpleTcpClient(e.IpPort);
+			SimpleTcpClient newClient = new SimpleTcpClient(e.IpPort);
 
-			connectedClients.Add(new_client);
+			connectedClients.Add(newClient);
 			connectedIP.Add(e.IpPort);
 
-			//here when client connects i need to send data regarding the buttons
-
-			//Const.server.Send(e.IpPort, "You were connected client " + connectedClients.Count);
-			if(Const.bingoButtonTexts != null)
-            {
-				Const.server.Send(e.IpPort, Const.bingoButtonTexts);
-            }
+			if (Const.buttonsContentJSON != null)
+			{
+				Const.server.Send(e.IpPort, Const.buttonsContentJSON);
+			}
 		}
 		private void ClientDisconnected(object sender, ConnectionEventArgs e)
 		{
 			MessageBox.Show($"[Server] [{e.IpPort}] client disconnected: {e.Reason}");
-
-			//remove client form the lsit
 
 			connectedClients.RemoveAll(client => client.ServerIpPort == e.IpPort);
 		}
@@ -79,11 +72,12 @@ namespace BingoCoop
 			//now send to all clients
 
 			foreach (SimpleTcpClient client in connectedClients)
-            {
+			{
 				Const.server.Send(client.ServerIpPort, Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count));
-            }
-
-
+			}
 		}
+		#endregion
+		#region Utility methods
+		#endregion
 	}
 }

@@ -1,18 +1,20 @@
-﻿using SuperSimpleTcp;
+﻿using Newtonsoft.Json;
+using SuperSimpleTcp;
 using System.Net;
 using System.Text;
-using BingoCoop;
+using System.Text.Json.Serialization;
 
 namespace BingoCoop
 {
 	public class Client
 	{
-
 		private int count = 0;
 		public Client()
 		{
 			
 		}
+
+		#region Public methods
 		public bool Join(IPAddress ipAddress, int port)
 		{
 			Log.Message($"Joining server with ip: {ipAddress} and port: {port}");
@@ -31,34 +33,41 @@ namespace BingoCoop
 			{
 				return false;
 			}
-			
-			//Const.client.Send("Hello, world!");
+
 			return true;
 		}
-		static void Connected(object sender, ConnectionEventArgs e)
+		#endregion
+		#region Private methods
+		private void Connected(object sender, ConnectionEventArgs e)
 		{
 			MessageBox.Show($"[Client] *** Server {e.IpPort} connected");
 		}
-		static void Disconnected(object sender, ConnectionEventArgs e)
+		private void Disconnected(object sender, ConnectionEventArgs e)
 		{
 			MessageBox.Show($"[Client] *** Server {e.IpPort} disconnected");
 		}
 		private void DataReceived(object sender, DataReceivedEventArgs e)
 		{
+			string data = Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count);
+			if (!Const.hasReceivedBoard)
+			{
+				List<string> board = JsonConvert.DeserializeObject<List<string>>(data);
+			}
 			//MessageBox.Show($"[Client] [{e.IpPort}] {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
 
 			//now when they receive data they just need to update with the string
 
+			if (count == 0 && !Const.isHosting)
+			{
+				Const.sheet.UpdateMapClient(data);
+			}
 
-			if(count == 0 && !Const.isHosting)
-            {
-				Const.sheet.UpdateMapClient(Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count));
-            }
-
-			else Const.sheet.UpdateColors(Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count));
-
+			else Const.sheet.UpdateColors(data);
 
 			count++;
 		}
+		#endregion
+		#region Utility methods
+		#endregion
 	}
 }
