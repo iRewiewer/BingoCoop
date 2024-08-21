@@ -14,7 +14,7 @@ namespace BingoCoop
 
 			InitializeComponent();
 
-			if(Const.debugging)
+			if(Const.isDebugging)
 			{
 				this.portTBox.Text = "25565";
 			}
@@ -31,6 +31,7 @@ namespace BingoCoop
 		
 		private void submitBtn_Click(object sender, EventArgs e)
 		{
+			// Server init
 			if(Const.isHosting && !this.hasServerStarted)
 			{
 				#region Error Handling
@@ -54,13 +55,15 @@ namespace BingoCoop
 				Server server = new Server();
 				this.hasServerStarted = server.Start(Const.serverIp, Const.serverPort);
 			}
-			//add condition
-			else if (!Const.isHosting)
+
+			// Client setting when is server
+			if (!Const.isHosting && !this.hasServerStarted)
 			{
 				#region Error Handling
-				if (!IPAddress.TryParse(this.ipTBox.Text, out IPAddress? _ip))
+				bool ipTryParseResult = IPAddress.TryParse(this.ipTBox.Text, out IPAddress? _ip);
+				if (!ipTryParseResult || this.ipTBox.Text.Count(c => c == '.') != 3)
 				{
-					string errorMessage = "IP address is not valid. Please enter a valid IP.";
+					string errorMessage = "IP address is not valid. Please enter a valid IP address.";
 					Log.Warning(errorMessage, Log.WarningType.IPError);
 					MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
@@ -92,16 +95,33 @@ namespace BingoCoop
 				Const.serverPort = _port;
 			}
 
+			// Init sheet here so we can send it to client (as server); for client, it doesn't matter where
+			Const.sheet = new BingoSheet(this);
+
+			// Some error occured, kill server if active, return to menu
+			if (Const.hasRaisedExitError)
+			{
+				if(Const.isHosting)
+				{
+					Const.server.Stop();
+				}
+				return;
+			}
+
+			// Client init
 			Client client = new Client();
 			this.isConnected = client.Join(Const.serverIp, Const.serverPort);
 
 			if (this.isConnected)
 			{
 				this.Hide();
-
-				Const.sheet = new BingoSheet(this);
-
 				Const.sheet.Show();
+			}
+			else
+			{
+				string message = "Could not connect to the server.";
+				Log.Warning(message, Log.WarningType.VarIsNull);
+				MessageBox.Show(message);
 			}
 		}
 

@@ -9,11 +9,12 @@ namespace BingoCoop
 			Const.logsFilePath = GetLogsFilePath();
 			Log.AssureLogs(Const.logsFilePath);
 			Log.Message("Starting application.");
-			Log.Message($"Debugging is {(Const.debugging ? "enabled" : "disabled")}.");
+			Log.Message($"Debugging is {(Const.isDebugging ? "enabled" : "disabled")}.");
 		}
 
 		private void joinBtn_Click(object sender, EventArgs e)
 		{
+			Const.hasRaisedExitError = false;
 			Log.Message("Pressed join button.");
 			this.Hide();
 			Const.isHosting = false;
@@ -22,6 +23,7 @@ namespace BingoCoop
 
 		private void hostBtn_Click(object sender, EventArgs e)
 		{
+			Const.hasRaisedExitError = false;
 			Log.Message("Pressed host button.");
 			this.Hide();
 			Const.isHosting = true;

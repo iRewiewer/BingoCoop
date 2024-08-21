@@ -2,7 +2,7 @@
 {
 	public static class Log
 	{
-		public enum ErrorType { FileHandling }
+		public enum ErrorType { FileHandling, ShouldNotHappen }
 		public enum WarningType { VarIsNull, PortError, IPError }
 
 		public static void AssureLogs(string filePath)

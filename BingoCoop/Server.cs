@@ -37,6 +37,10 @@ namespace BingoCoop
 
 			return true;
 		}
+		public void SendToAllClients(string message)
+		{
+
+		}
 		#endregion
 		#region Private methods
 		private void ClientConnected(object sender, ConnectionEventArgs e)
@@ -61,16 +65,6 @@ namespace BingoCoop
 		}
 		private void DataReceived(object sender, DataReceivedEventArgs e)
 		{
-			//MessageBox.Show($"[Server] [{e.IpPort}]: {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
-
-			//echo the received data back tot he client:
-			//Const.server.Send(e.IpPort, "You said: " + Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count));
-
-
-			//here he's gonna receive the data from client which means only a change which needs to be communicated to all other clients so
-
-			//now send to all clients
-
 			foreach (SimpleTcpClient client in connectedClients)
 			{
 				Const.server.Send(client.ServerIpPort, Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count));

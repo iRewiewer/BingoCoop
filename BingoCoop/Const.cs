@@ -6,12 +6,12 @@ namespace BingoCoop
 	public static class Const
 	{
 		#region Set by app
+		public static bool isDebugging = true;
 		public static string logsFilePath;
 		public static string logsFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
 		public static string bingoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bingo.json");
 		public static Form rootForm;
-
-		public static int clientID;
+		public static bool hasRaisedExitError = false;
 
 		public static bool isHosting;
 		public static string IPv4 = GetIPv4();
@@ -23,13 +23,6 @@ namespace BingoCoop
 		public static BingoSheet sheet;
 		public static string buttonsContentJSON;
 		public static bool hasReceivedBoard = false;
-
-		#endregion
-
-		#region Set by server
-		#endregion
-
-		#region Set by client
 		#endregion
 
 		#region Methods

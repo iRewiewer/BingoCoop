@@ -5,131 +5,142 @@ namespace BingoCoop
 {
 	public partial class BingoSheet : Form
 	{
-		private List<Button> buttonsList = new List<Button>();
-		private List<string> buttonsContentList = new List<string>();
+		private Click playerClick;
 		private Form parentForm;
+
 		private bool hasSetName = false;
 		private bool hasSetColor = false;
-		private Color playerColor;
+		private bool finishedPlayerSetup = false;
+
+		private List<Button> buttonsList = new List<Button>();
+		private List<string> buttonsContentList = new List<string>();
 
 		public BingoSheet(Form parentForm)
 		{
 			this.parentForm = parentForm;
+			this.playerClick = new Click();
 
 			InitializeComponent();
 
-			// Get list of buttons
-			for (int i = 1; i <= 25; i++)
+			if(Const.isHosting)
 			{
-				Button currentButton = (Button)this.Controls.Find($"Button{i}", true).FirstOrDefault();
-				buttonsList.Add(currentButton);
-				buttonsContentList.Add(currentButton.Text);
+				List<string> content = GenerateBoardContent();
+				InitializeBoard(content);
 			}
 
-			Const.buttonsContentJSON = JsonConvert.SerializeObject(buttonsContentList);
-			RandomizeBoard();
+			if(Const.hasRaisedExitError)
+			{
+				Const.rootForm.Show();
+				this.parentForm.Close();
+				this.Close();
+			}
 		}
 		#region Public methods
-		public void UpdateColors(string data)
+		public void UpdateBoardOnClick(string data)
 		{
-			//i receive data and i update the colors + disable the thing
+			Log.Message($"Update board on click with data: {data}");
+			Click click = new Click();
 
-			//let's parse string which will be button:color:true/false
-
-			Console.WriteLine(data);
-
-			// Split the input string into parts based on ":" and remove any surrounding spaces
-			string[] parts = data.Split(':');
-
-			// Extract the button name (first part)
-			string buttonText = parts[0].Trim();
-
-			// Extract the color string (second part)
-			string colorString = parts[1].Trim().Substring("Color [".Length); // Remove "Color [" from the beginning
-			colorString = colorString.Remove(colorString.Length - 1); // Remove "]" from the end
-
-			// Extract the boolean value (third part)
-			bool booleanValue = Convert.ToBoolean(parts[2].Trim());
-
-			// Parse the color string to get R, G, and B values
-			int r = int.Parse(colorString.Split(',')[1].Trim().Substring(2));
-			int g = int.Parse(colorString.Split(',')[2].Trim().Substring(2));
-			int b = int.Parse(colorString.Split(',')[3].Trim().Substring(2));
-
-			// Create Color object using the extracted R, G, B values
-			Color color = Color.FromArgb(r, g, b);
-
-
-			//good now we have all we need so let's find the buttona and update 
+			try
+			{
+				click = JsonConvert.DeserializeObject<Click>(data);
+			}
+			catch (Exception e)
+			{
+				Log.Error("Could not parse click data.", Log.ErrorType.ShouldNotHappen);
+			}
 
 			this.Invoke((MethodInvoker)(() =>
-
 			{
 				foreach (Button button in buttonsList)
 				{
-					if (button.Text == buttonText)
+					if (button.Text == click.ButtonText)
 					{
-						button.Enabled = booleanValue;
-						button.BackColor = color;
+						button.BackColor = click.PlayerColor;
 						break;
 					}
 				}
 			}
 			));
 		}
-		public void UpdateMapClient(string data)
-		{
-			string[] parts = data.Split(':');
-
-			int i = 0;
-
-			this.Invoke((MethodInvoker)(() =>
-			{
-				foreach (Button button in buttonsList)
-				{
-					button.Text = parts[i];
-					i++;
-				}
-			}));
-		}
 		#endregion
 		#region Private methods
-		private void RandomizeBoard()
+		public void InitializeBoard(List<string> content)
 		{
-			string jsonContent = File.ReadAllText(Const.bingoPath);
+			if(content == null || Const.hasRaisedExitError)
+			{
+				return;
+			}
 
-			Dictionary<string, List<int>> bingoDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<int>>>(jsonContent);
+			// Initialize board with the random values
+			Const.hasReceivedBoard = true;
+			for (int i = 1; i <= 25; i++)
+			{
+				Button currentButton = (Button)this.Controls.Find($"Button{i}", true).FirstOrDefault();
+				currentButton.Text = content[i - 1];
+				buttonsList.Add(currentButton);
+				buttonsContentList.Add(currentButton.Text);
+			}
 
+			Const.buttonsContentJSON = JsonConvert.SerializeObject(buttonsContentList);
+		}
+		private List<string> GenerateBoardContent()
+		{
+			List<string> buttonsContent = new List<string>();
+			string jsonContent = string.Empty;
+			Dictionary<string, List<int>>? bingoDictionary = new Dictionary<string, List<int>>();
+
+			try
+			{
+				jsonContent = File.ReadAllText(Const.bingoPath);
+			}
+			catch (Exception e)
+			{
+				string errorMessage = $"Could not read bingo file from path:\n'{Const.bingoPath}'.\nProgram will exit.";
+				Log.Error(errorMessage, Log.ErrorType.FileHandling);
+				MessageBox.Show(errorMessage);
+				Const.hasRaisedExitError = true;
+				return null;
+			}
+
+			try
+			{
+				bingoDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<int>>>(jsonContent);
+			}
+			catch (Exception e)
+			{
+				string errorMessage = $"Could not parse bingo file, possibly wrongly formatted.\nProgram will exit.";
+				Log.Error(errorMessage, Log.ErrorType.FileHandling);
+				MessageBox.Show(errorMessage);
+				Const.hasRaisedExitError = true;
+				return null;
+			}
+			
 			Random random = new Random();
 			List<string> usedEntries = new List<string>();
 
-			foreach (Button button in this.buttonsList)
+			for (int i = 1; i <= 25; i++)
 			{
-				// Get a random entry from the dictionary
 				KeyValuePair<string, List<int>> randomEntry;
 				do
 				{
 					randomEntry = bingoDictionary.ElementAt(random.Next(bingoDictionary.Count));
 				} while (usedEntries.Contains(randomEntry.Key));
 
-				// Set the formatted text of the button
 				string buttonText = randomEntry.Key;
 
-				// Replace "_" with a random value from the List<int> if it's not "null"
 				if (randomEntry.Value != null)
 				{
 					int randomValue = randomEntry.Value[random.Next(randomEntry.Value.Count)];
 					buttonText = buttonText.Replace("_", randomValue.ToString());
 				}
 
-				// Additional formatting (modify as needed)
 				buttonText = buttonText.Replace("{", "").Replace("}", "").Replace("|", "");
-
-				button.Text = buttonText;
-
-				// Mark the used entry to ensure uniqueness
+				buttonsContent.Add(buttonText);
 				usedEntries.Add(randomEntry.Key);
 			}
+
+			return buttonsContent;
 		}
 		#endregion
 		#region Form Methods
@@ -142,11 +153,17 @@ namespace BingoCoop
 			}
 			this.hasSetColor = true;
 
-			playerColor = Color.FromArgb(0, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
+			playerClick.PlayerColor = Color.FromArgb(255, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
 
-			if (this.hasSetColor && this.hasSetName)
+			if (this.hasSetColor && this.hasSetName && !this.finishedPlayerSetup)
 			{
-				buttonsList.ForEach(button => { button.Enabled = true; });
+				buttonsList.ForEach(button =>
+				{
+					button.Enabled = true;
+					button.BackColor = Color.White;
+				});
+
+				finishedPlayerSetup = true;
 			}
 		}
 		private void playerNameBtn_Click(object sender, EventArgs e)
@@ -155,47 +172,58 @@ namespace BingoCoop
 			if (playerNameDialogue.ShowDialog() == DialogResult.OK)
 			{
 				playerNameBtn.Text = playerNameDialogue.playerName;
+				playerClick.PlayerName = playerNameBtn.Text;
 			};
 			this.hasSetName = true;
 
-			if (this.hasSetColor && this.hasSetName)
+			if (this.hasSetColor && this.hasSetName && !this.finishedPlayerSetup)
 			{
 				buttonsList.ForEach(button =>
 				{
 					button.Enabled = true;
 					button.BackColor = Color.White;
 				});
+
+				finishedPlayerSetup = true;
 			}
 		}
 		private void BingoButton_Click(object sender, EventArgs e)
 		{
 			Button buttonPressed = (Button)sender;
+			Color backup = playerClick.PlayerColor;
 
-			// send info to server that button has been clicked
-			// mark it with color of player
+			if (buttonPressed.BackColor != Color.White && buttonPressed.BackColor != playerClick.PlayerColor)
+			{
+				Log.Message("Tried clicking on another player's tile.");
+				return;
+			}
 
-			Const.client.Send(buttonPressed.Text + ':' + playerColor + ":false");
+			if(buttonPressed.BackColor == playerClick.PlayerColor)
+			{
+				Log.Message("Deselecting tile.");
+				playerClick.PlayerColor = Color.White;
+			}
+
+			playerClick.ButtonText = buttonPressed.Text;
+			string clickJson = JsonConvert.SerializeObject(playerClick, Formatting.Indented);
+			Const.client.Send(clickJson);
+
+			// reset color, just in case
+			playerClick.PlayerColor = backup;
 		}
 		private void OnFormClosing(object sender, FormClosingEventArgs e)
 		{
-			Log.Message("Closing bingo sheet.");
+			Log.Message("Disconnecting from server.");
+
+			Const.client.Disconnect();
 			if (Const.isHosting)
 			{
-				Const.client.Disconnect();
-				if (Const.server != null)
-				{
-					Const.server.Stop();
-				}
+				Log.Message("Shutting down server.");
+				Const.server.Stop();
 			}
 
 			Const.rootForm.Show();
 			this.parentForm.Close();
-		}
-		#endregion
-		#region Utility methods
-		private string ParseRGB(byte R, byte G, byte B)
-		{
-			return $"({R},{G},{B})";
 		}
 		#endregion
 	}

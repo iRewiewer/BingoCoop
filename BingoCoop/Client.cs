@@ -49,22 +49,17 @@ namespace BingoCoop
 		private void DataReceived(object sender, DataReceivedEventArgs e)
 		{
 			string data = Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count);
+
 			if (!Const.hasReceivedBoard)
 			{
-				List<string> board = JsonConvert.DeserializeObject<List<string>>(data);
+				Const.hasReceivedBoard = true;
+				List<string> content = JsonConvert.DeserializeObject<List<string>>(data);
+				Const.sheet.InitializeBoard(content);
 			}
-			//MessageBox.Show($"[Client] [{e.IpPort}] {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
-
-			//now when they receive data they just need to update with the string
-
-			if (count == 0 && !Const.isHosting)
+			else
 			{
-				Const.sheet.UpdateMapClient(data);
+				Const.sheet.UpdateBoardOnClick(data);
 			}
-
-			else Const.sheet.UpdateColors(data);
-
-			count++;
 		}
 		#endregion
 		#region Utility methods
