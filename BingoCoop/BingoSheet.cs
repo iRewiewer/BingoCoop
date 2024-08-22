@@ -19,16 +19,23 @@ namespace BingoCoop
 		{
 			this.parentForm = parentForm;
 			this.playerClick = new Click();
+			List<string> content = new List<string>();
 
 			InitializeComponent();
 
 			if(Const.isHosting)
 			{
-				List<string> content = GenerateBoardContent();
-				InitializeBoard(content);
+				content = GenerateBoardContent();
+			}
+			else
+			{
+				// fill with empty for now, will get data from server anyway
+				content = Enumerable.Repeat(string.Empty, 25).ToList();
 			}
 
-			if(Const.hasRaisedExitError)
+			InitializeBoard(content);
+
+			if (Const.hasRaisedExitError)
 			{
 				Const.rootForm.Show();
 				this.parentForm.Close();
@@ -73,11 +80,20 @@ namespace BingoCoop
 			}
 
 			// Initialize board with the random values
-			Const.hasReceivedBoard = true;
 			for (int i = 1; i <= 25; i++)
 			{
 				Button currentButton = (Button)this.Controls.Find($"Button{i}", true).FirstOrDefault();
-				currentButton.Text = content[i - 1];
+
+				// if it gets called from client, it'll require this cuz another thread
+				if (currentButton.InvokeRequired)
+				{
+					currentButton.Invoke(new Action(() => currentButton.Text = content[i - 1]));
+				}
+				else
+				{
+					currentButton.Text = content[i - 1];
+				}
+
 				buttonsList.Add(currentButton);
 				buttonsContentList.Add(currentButton.Text);
 			}
