@@ -144,7 +144,7 @@ namespace BingoCoop
 		}
 		#endregion
 		#region Form Methods
-		private void colorBtn_Click(object sender, EventArgs e)
+		private void ColorBtn_Click(object sender, EventArgs e)
 		{
 			if (colorDialog.ShowDialog() != DialogResult.Cancel)
 			{
@@ -166,7 +166,7 @@ namespace BingoCoop
 				finishedPlayerSetup = true;
 			}
 		}
-		private void playerNameBtn_Click(object sender, EventArgs e)
+		private void PlayerNameBtn_Click(object sender, EventArgs e)
 		{
 			PlayerNameDialogue playerNameDialogue = new PlayerNameDialogue();
 			if (playerNameDialogue.ShowDialog() == DialogResult.OK)

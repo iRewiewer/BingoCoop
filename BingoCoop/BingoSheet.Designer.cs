@@ -410,7 +410,7 @@
 			colorBtn.Size = new Size(29, 27);
 			colorBtn.TabIndex = 27;
 			colorBtn.UseVisualStyleBackColor = true;
-			colorBtn.Click += colorBtn_Click;
+			colorBtn.Click += ColorBtn_Click;
 			// 
 			// playerNameBtn
 			// 
@@ -419,7 +419,7 @@
 			playerNameBtn.Size = new Size(134, 27);
 			playerNameBtn.TabIndex = 28;
 			playerNameBtn.UseVisualStyleBackColor = true;
-			playerNameBtn.Click += playerNameBtn_Click;
+			playerNameBtn.Click += PlayerNameBtn_Click;
 			// 
 			// BingoSheet
 			// 
@@ -458,6 +458,7 @@
 			Controls.Add(button1);
 			Name = "BingoSheet";
 			Text = "BingoSheet";
+			FormClosing += OnFormClosing;
 			ResumeLayout(false);
 			PerformLayout();
 		}
